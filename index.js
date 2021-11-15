@@ -28,6 +28,7 @@ app.get('/', (req, res) => {
 
 client.connect(err => {
     const servicesCollection = client.db("AldinTravels").collection("servicesData");
+    const bookingsCollection = client.db("AldinTravels").collection("bookings");
    
     
     // Add service
@@ -59,6 +60,28 @@ client.connect(err => {
     });
 
 
+   //Confirm Orders
+   app.post("/confirmOrder", async (req, res) => {
+       const result = await bookingsCollection.insertOne(req.body);
+      res.send(result);
+
+   });
+
+      //  My confirmOrders
+      app.get("/myOrders/:email", async(req, res) => {
+          const result = await bookingsCollection.find({email:req.params.email}).toArray();
+          res.send(result);
+      })  
+
+
+
+      //Delete Order 
+      app.delete("/deleteOrder/:id",async (req, res) =>{
+          const result = await bookingsCollection.deleteOne({_id: ObjectId(req.params.id),});
+
+          res.send(result);
+      });
+    
 
 });
   
