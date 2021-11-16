@@ -83,6 +83,18 @@ client.connect(err => {
       });
     
 
+      //update statuses
+      app.put("/updateStatus/:id", (req, res) => {
+          const id = req.params.id;
+          const updateStatus =req.body.status;
+          const filter = {_id: ObjectId(id)};
+          console.log(updateStatus);
+          bookingsCollection.updateOne(filter,{ $set: {status:updateStatus}, })
+          .then((result) => {
+              res.send(result);
+          });
+      })
+
 });
   
 
